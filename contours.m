@@ -1,32 +1,13 @@
-img=imread('legumesnb.png'); 
+%Implementation of Sobel filter in order to detect edges on image
+%Sobel filter are kind of 2D derivative function that highlight sharp 
+%variation on pixels values on the 2 axis.
+%Based on Wikipedia article "Sobel Operator"
+
+img=imread('test images\imagenb.png'); 
 img=rgb2gray(img);
 img=img(:,:,1);
 
-%These matrix are only for test purpose
-
-A = [   1 15 15 2 3 0 1 2 0 0 1 0;
-        4 2 15 15 2 0 1 3 0 0 0 1;
-        0 2 3 4 15 15 0 0 1 0 0 2;
-        5 0 1 0 4 15 15 1 1 1 0 0;
-        2 0 3 0 2 15 15 4 0 0 0 0;
-        0 1 4 0 3 15 15 3 1 0 0 0;
-        0 0 1 0 4 12 15 2 0 0 1 0; 
-        3 0 5 0 3 13 15 1 1 0 0 0];
-
-AA = [   15 15 15 15 15 15 15 15 15 15  15 15;
-        4 15 15 15 14 15 15 15 15 15 15 15;
-        0 2 3 3 15 15 15 14 15 15 15 15;
-        5 0 1 0 4 15 15 15 15 15 15 15;
-        2 0 3 0 2 15 15 15 15 15 15 15;
-        0 1 4 0 3 15 15 15 15 15 15 15;
-        0 0 1 0 4 14 15 15 15 15 15 15;
-        3 0 5 0 3 13 15 15  15 15  15 15];
-    
-    
-B =  [  195 195 195 195;
-        195 195 195 195;
-        104 104 104 104;
-        195 195 195 195;]
+threshold = 255;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -60,26 +41,26 @@ Gy = conv2(Z,Gsy, 'same');
 Gy1 = conv2(Z,Gpy, 'same');
 Gy2 = conv2(Gcy,Gcx,Z);
 
- G = sqrt(Gx.^2 + Gy.^2);
- G1 = sqrt(Gx1.^2 + Gy1.^2);
- G2 = sqrt(Gx2.^2 + Gy2.^2);
- 
- seuil = 150;
- 
- result = zeros(size(G1))
-result( G1 > seuil ) = 1;
+G = sqrt(Gx.^2 + Gy.^2);
+G1 = sqrt(Gx1.^2 + Gy1.^2);
+G2 = sqrt(Gx2.^2 + Gy2.^2);
+
+result = zeros(size(G1))
+
+%G1 is a combination of the result of the convolution between the x-axis 
+%and y-axis sobel filter and the image
+result( G1 > threshold ) = 1;
 G1 = result; 
 
+%colormap(gray)
+%imagesc(Z)
+figure
 colormap(gray)
- imagesc(Z)
- figure
- colormap(gray)
- subplot(1, 3, 1)
- imagesc(G2)
- subplot(1, 3, 2)
- imagesc(G)
- subplot(1, 3, 3)
- imagesc(G1)
+subplot(1, 2, 1)
+imagesc(Z)
+subplot(1, 2, 2)
+imagesc(G1)
+
 
   
  
